@@ -1,0 +1,84 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta charset="UTF-8">
+    <title>PLANETAS STAR WARS</title>
+    <style>
+        input[type='submit'], button, [aria-label] {
+            cursor: pointer;
+        }
+
+        #editPlanet {
+            display: none;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: segoe ui, sans-serif
+        }
+
+        table {
+            font-family: tahoma, sans-serif;
+            border: 1px solid;
+            border-collapse: collapse;
+        }
+
+        th {
+            background-color: #99CCFF
+        }
+
+        td, th {
+            border: 1px solid;
+            padding: 5px;
+        }
+
+        td.number {
+                text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <img src="logo.png" />
+
+    <div id="addPlanet">
+        <h3>Adicionar Planeta</h3>
+        <form action="javascript:void(0);" method="POST" onsubmit="addItem()">
+            <input type="text" id="add-name" placeholder="Nome ou SWAPI Id">
+            <input type="text" id="add-climate" placeholder="Clima">
+            <input type="text" id="add-terrain" placeholder="Terreno">
+            <input type="submit" value="Adicionar">
+        </form>
+    </div>
+
+    <div id="editPlanet">
+        <h3>Editar Planeta</h3>
+        <form class="editForm">
+            <input type="hidden" id="edit-id">
+            <input type="text" id="edit-name">
+            <input type="text" id="edit-climate">
+            <input type="text" id="edit-terrain">
+            <input type="submit" value="Salvar">
+            <a onclick="closeInput()" aria-label="Close">&#10006;</a>
+        </form>
+    </div>
+
+    <h4 id="counter"></h4>
+
+    <table>
+        <tr>
+            <th>Nome</th>
+            <th>Clima</th>
+            <th>Terreno</th>
+            <th>Filmes</th>
+            <th>SWAPI ID</th>
+            <th>SWAPI URL</th>
+        </tr>
+        <tbody id="planets"></tbody>
+    </table>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+            crossorigin="anonymous"></script>
+    <script src="site.js"></script>
+</body>
+</html>
