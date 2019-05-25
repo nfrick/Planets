@@ -17,6 +17,7 @@ namespace PlanetApi {
         // This method gets called by the runtime. Use this method to add services to the 
         //container.
         public void ConfigureServices(IServiceCollection services) {
+            // Configura o uso do bando de dados em memória
             services.AddDbContext<PlanetContext>(opt =>
                 opt.UseInMemoryDatabase("dbPlanets"));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
