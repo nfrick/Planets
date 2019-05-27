@@ -1,0 +1,54 @@
+API REST PLANETS
+================
+Objetivo: Ser um mirror local da API Star Wars (https://swapi.co/)
+
+1	Estrutura de Dados
+----------------------
+Segundo a especificação do desafio:
+  -	Para cada planeta, os seguintes dados devem ser obtidos do banco de dados da aplicação, sendo inserido manualmente:
+    •	Nome
+    •	Clima
+    •	Terreno
+  -	Para cada planeta também devemos ter a quantidade de aparições em filmes, que podem ser obtidas pela API pública do Star Wars: https://swapi.co/
+
+Me pareceu estranho permitir cadastramento de clima e terreno livremente mas buscar as aparições em filmes no swapi. Inicialmente, imaginei a tabela Planetas permitindo cadastrar, além dos planetas Star Wars, outros planetas.
+
++---------------------+             +--------------------+
+|                     |             |                    |
+|      BANCO DE       |1        0..1|                    |
+|       DADOS         |-------------|       SWAPI        |
+|       LOCAL         |             |                    |
+|                     |             |                    |
++---------------------+       -     +--------------------+
+
+•	Usuário pode cadastrar planetas fornecendo um nome ou um número, clima (opcional) e terreno (opcional).
+•	Se for informado um nome, o planeta é pesquisado por nome no swapi através de um ou mais GETs. O swapi responde a um GET com um objeto contendo uma “página” com 10 planetas e URLs para as páginas anterior e seguinte.  Se o planeta não estiver na página, lê-se a página seguinte. Encontrado o planeta, obtém-se a quantidade de filmes e a busca é encerrada.  Se, após a última página, o planeta não for encontrado, ele será considerado “não Star Wars”.
+•	Se for informado um número, o planeta é pesquisado no swapi diretamente usando https://swapi.co/planets/número. Se o planeta for encontrado (número entre 1 e 61), obtém-se a quantidade de filmes. Caso contrário, o planeta será “não Star Wars” e o número será o nome do planeta. O cadastramento por número agiliza muito a entrada de dados.
+•	Se o planeta for encontrado no swapi e clima e/ou terreno estiverem em branco, clima e/ou terreno do swapi serão usados. Se o clima e/ou terreno forem fornecidos pelo usuário, terão precedência. Em outras palavras, o usuário pode fazer override dos dados do swapi e fazer reset, bastando executar um PUT com clima e/ou terreno em branco. 
+•	Se o planeta não for encontrado no swapi, a quantidade de filmes é zero.
+
+Em um segundo momento, resolvi deixar opcional o cadastramento de planetas não Star Wars. Para isso, bastou alterar o método que valida o planeta, executado antes de adicionar ou alterar planetas. Dependendo das linhas de código habilitadas, a API aceitará ou não planetas não Star Wars:
+   
+   public bool IsPlanetInvalid(PlanetM planet) {
+        // Para permitir apenas planetas Star Wars, comentar as linhas abaixo
+        /*return string.IsNullOrWhiteSpace(planet.Name) || // Nome em branco
+                 _planets.Find(p => p.Id != planet.Id &&   // Não existir outro planeta com mesmo nome
+                 p.Name.ToLower() == planet.Name.ToLower()).Any(); */
+
+        // Para permitir qualquer planeta, comentar as linhas abaixo
+          return string.IsNullOrWhiteSpace(planet.Name) || // Nome em branco
+                 !planet.IsStarWars ||                     // Planeta não é Star Wars
+                 _planets.Find(p => p.Id != planet.Id &&   // Não existir outro planeta com mesmo nome
+                 p.Name.ToLower() == planet.Name.ToLower()).Any();
+   }
+Há um problema ao se permitir planetas não Star Wars: com a liberdade de alterações (nome, clima, terreno), é possível, a partir de um planeta Star Wars, criar um planeta completamente diferente, editando nome, clima e terreno.
+
+2	Desenvolvimento
+-------------------
+Para desenvolvimento, normalmente escolho as melhores ferramentas disponíveis, sem preferências pessoais. Para este projeto, optei por C# por não haver tempo hábil para me familiarizar com as ferramentas e bibliotecas Java para APIs REST. 
+Para facilitar os testes, iniciei o projeto usando um banco de dados “in memory”. Após os testes iniciais, não foi difícil portar a API para MongoDB. A diferença está no Id: enquanto o banco “in memory” usa auto-increment integers (1, 2, 3…), o MongoDB usa chaves string com 24 caracteres, por exemplo 5ceacdec22326e179430ca13.
+Para não haver redundância de código, criei a abstract class PlanetBase, da qual derivam Planet e PlanetM, cada uma com sua definição de Id.
+Além do driver para MongoDB, a única biblioteca externa utilizada foi a Newtonsoft.Json, que simplificou muito a leitura do json retornado pelo swapi. Para testes, usei Postman e uma página HTML.
+Apesar do código ser bastante simples, inclui comentários em todas as situações.
+ 
+Finalmente, optei por deixar as duas APIs funcionando: api/planet para o banco “in memory” e api/planetm para o MongoDB. 
