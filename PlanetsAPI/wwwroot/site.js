@@ -1,10 +1,9 @@
-﻿const uri = "api/planet";
+﻿const uri = "api/planetm";
 let planets = null;
 
 // Contagem de planetas cadastrados
 function getCount(count) {
-    const el = $("#counter");
-        el.text(count + " planeta" + (count === 1 ? "" : "s"));
+    $("#counter").text(count + " planeta" + (count === 1 ? "" : "s"));
 }
 
 $(document).ready(function () {
@@ -45,7 +44,7 @@ function getData() {
                     )
                     .append(
                         $("<td></td>").append(
-                            $("<button>Deletar</button>").on("click", function () {
+                        $("<button class='button-delete'>Deletar</button>").on("click", function () {
                                 deleteItem(item.id);
                             })
                         )
@@ -75,7 +74,10 @@ function addItem() {
         contentType: "application/json",
         data: JSON.stringify(item),
         error: function (jqXHR, textStatus, errorThrown) {
-            alert("Planeta já existente!");
+            if ($("#add-name").val() === "")
+                alert("Nome em branco!");
+            else
+                alert("Planeta " + item.name + " já existente ou não Star Wars!");
         },
         success: function (result) {
             getData();
@@ -137,7 +139,7 @@ $(".editForm").on("submit", function () {
 });
 
 
-// Depois de atualzair
+// Depois de atualizar
 function closeInput() {
     $("#editPlanet").css({ display: "none" });
     $("#addPlanet").css({ display: "block" });

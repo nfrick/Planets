@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using PlanetsAPI.Models;
 
-namespace TodoApi.Models {
+namespace PlanetsAPI.Models {
     public class PlanetContext : DbContext {
         public PlanetContext(DbContextOptions<PlanetContext> options)
             : base(options) {

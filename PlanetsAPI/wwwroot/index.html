@@ -2,67 +2,54 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <meta charset="UTF-8">
     <title>PLANETAS STAR WARS</title>
-    <style>
-        input[type='submit'], button, [aria-label] {
-            cursor: pointer;
-        }
-
-        #editPlanet {
-            display: none;
-        }
-
-        h1, h2, h3, h4 {
-            font-family: segoe ui, sans-serif
-        }
-
-        table {
-            font-family: tahoma, sans-serif;
-            border: 1px solid;
-            border-collapse: collapse;
-        }
-
-        th {
-            background-color: #99CCFF
-        }
-
-        td, th {
-            border: 1px solid;
-            padding: 5px;
-        }
-
-        td.number {
-                text-align: right;
-        }
-    </style>
+    <link rel="stylesheet"
+          type="text/css"
+          href="styles.css" />
 </head>
 <body>
-    <img src="logo.png" />
-
-    <div id="addPlanet">
-        <h3>Adicionar Planeta</h3>
-        <form action="javascript:void(0);" method="POST" onsubmit="addItem()">
-            <input type="text" id="add-name" placeholder="Nome ou SWAPI Id">
-            <input type="text" id="add-climate" placeholder="Clima">
-            <input type="text" id="add-terrain" placeholder="Terreno">
-            <input type="submit" value="Adicionar">
-        </form>
+    <div style="width: 100%; overflow: hidden;">
+        <div style="width: 420px; float: left;">
+            <img src="logo.png" alt="project logo" />
+        </div>
+        <div style="margin-left: 440px;">
+            <div id="addPlanet">
+                <form class="form-style" action="javascript:void(0);" method="POST" onsubmit="addItem()">
+                    <ul>
+                        <li><input type="text" id="add-name" class="field-style field-full align-none" placeholder="Nome ou SWAPI Id"></li>
+                        <li><input type="text" id="add-climate" class="field-style field-full align-none" placeholder="Clima"></li>
+                        <li><input type="text" id="add-terrain" class="field-style field-full align-none" placeholder="Terreno"></li>
+                        <li><input type="submit" value="Adicionar"></li>
+                    </ul>
+                </form>
+            </div>
+            <div id="editPlanet">
+                <form class="editForm form-style">
+                    <input type="hidden" id="edit-id">
+                    <ul>
+                        <li><input type="text" id="edit-name" class="field-style field-full align-none"></li>
+                        <li><input type="text" id="edit-climate" class="field-style field-full align-none"></li>
+                        <li><input type="text" id="edit-terrain" class="field-style field-full align-none"></li>
+                        <li>
+                            <div style="width: 100%; overflow: hidden;">
+                                <div style="width: 80px; float: left;">
+                                    <input type="submit" value="Salvar" class="align-left">
+                                </div>
+                                <div style="width: 80px; float: left;">
+                                    <a onclick="closeInput()" aria-label="Close" class="align-right">Cancelar</a>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </form>
+            </div>
+        </div>
     </div>
-
-    <div id="editPlanet">
-        <h3>Editar Planeta</h3>
-        <form class="editForm">
-            <input type="hidden" id="edit-id">
-            <input type="text" id="edit-name">
-            <input type="text" id="edit-climate">
-            <input type="text" id="edit-terrain">
-            <input type="submit" value="Salvar">
-            <a onclick="closeInput()" aria-label="Close">&#10006;</a>
-        </form>
-    </div>
-
+    
+<div style="margin: 30px">
     <h4 id="counter"></h4>
+</div>
+
 
     <table>
         <tr>
@@ -72,6 +59,7 @@
             <th>Filmes</th>
             <th>SWAPI ID</th>
             <th>SWAPI URL</th>
+            <th colspan="2"></th>
         </tr>
         <tbody id="planets"></tbody>
     </table>

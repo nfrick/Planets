@@ -4,7 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using TodoApi.Models;
+using PlanetsAPI.Models;    // Para uso do banco de dados "in memory"
+using PlanetsAPI.Services;  // Para uso do MongoDb
 
 namespace PlanetApi {
     public class Startup {
@@ -17,9 +18,13 @@ namespace PlanetApi {
         // This method gets called by the runtime. Use this method to add services to the 
         //container.
         public void ConfigureServices(IServiceCollection services) {
-            // Configura o uso do bando de dados em memória
-            services.AddDbContext<PlanetContext>(opt =>
+            // Configura o uso do bando de dados "in memory"
+            services.AddDbContext<PlanetContext>(opt => 
                 opt.UseInMemoryDatabase("dbPlanets"));
+
+            // Configura o uso do bando de dados MongoDb
+            services.AddScoped<PlanetMService>();
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
@@ -34,10 +39,11 @@ namespace PlanetApi {
                 // production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-            // added HTML page
+            // para iniciar com página HTML
             app.UseDefaultFiles();
             app.UseStaticFiles();
-            // end added
+            // página HTML
+
             app.UseHttpsRedirection();
             app.UseMvc();
         }
